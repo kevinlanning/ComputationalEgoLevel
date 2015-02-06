@@ -1,0 +1,50 @@
+---
+title: "LIWCEgoR: Exemplars"
+author: "Kevin Lanning"
+date: "Friday, February 06, 2015"
+output: html_document
+---
+
+***Introduction***
+
+**Data cleaning** scanning and cleaning of SCT manual, discuss question mark problem,...
+
+**LIWC categories** are not mutually exclusive.  Dictionaries for superordinate categories (e.g., negative emotion) do not correspond precisely with the sum of subordinate dictionaries (dictionaries for anxiety, anger, and sadness). Consequently, no comprehensive relationship between LIWC language use categories and a criterion such as ego level can be examined without including overlapping categories. One solution, to be used here, is to separately examine the properties of (a) the broadest superordinate LIWC categories, (b) the narrowest ones, and (c) all LIWC categories, including superordinate, subordinate, and, for some domains, intermediate levels.  This last analysis, while comprehensive, includes multiple tallies of the same response. 
+
+Include code here for subsetting variables into super and subordinate.
+
+***Analyses of exemplars (material from Hy et al.) using LIWC***
+
+**Univariate analyses** 
+
+In Ego Level, a flatter distribution than in real world data can be expected. 
+
+In LIWC, skew in raw counts, possible square root transform of count data. 
+
+** Bivariate and multivariate analyses **
+
+Correlations. 
+
+Regressions. Linear and quadratic effects. Use of folded sample 
+
+Summary.  
+
+***Analyses of respondent data using LIWC***
+
+
+
+***Analyses of respondent data using other methods (including raw word counts)***
+
+The raw word count analyses should use LASSO regressions or something similar to control for the number of predictors.
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
