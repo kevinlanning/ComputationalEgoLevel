@@ -1,68 +1,127 @@
 ---
-title: "LIWCEgoR: Exemplars"
+title: "LIWCEgoR"
 author: "Kevin Lanning"
 date: "Friday, February 06, 2015"
-output: html_document
+output: word_document
 ---
+# Introduction #
 
-***Introduction***
+**Ego level** is conceptualized both as a single construct or dimension of individual differences in personality and as a series of qualitatively distinct milestones whose potential achievement occurs in a strict sequence over the course of maturation.  This implies both that predictors of Ego Level may be non-linear as well as linear (Einstein & Lanning).
+
+One other implication is that it may be worthwhile to examine the LIWC correlates of Ego Level at particular cutting points - that is, the LIWC categories which distinguish speech at adjacent ego levels.  For example, the Conformist stage can be considered as an equilibrium, or as a local minimum from which "escape" (i.e., movement to the next stage) is difficult, running counter to the powerful social incentives of group loyalty and simple reciprocity. Loevinger (19xx) speculated that one avenue away from the gravitational pull of simple conformism might be the (insert quote here). This suggests that individuals at the Self-aware stage, in comparison with those at the just-prior Conformist stage, would be characterized by greater ____________ and lesser _________.
+
+**LIWC** (text from Daniel's thesis).
+
+## Overview of studies ##
+
+Treat exemplars and participant data as two separate studies.
+
+# Study 1 #
+
+# Introduction #
+
+Describe manual, cite paper in 1990s which describes SCT as the best validated projective measure.
+
+# Methods #
 
 **Data cleaning** scanning and cleaning of SCT manual, discuss question mark problem,...
 
-**LIWC categories** are not mutually exclusive.  Dictionaries for superordinate categories (e.g., negative emotion) do not correspond precisely with the sum of subordinate dictionaries (dictionaries for anxiety, anger, and sadness). Consequently, no comprehensive relationship between LIWC language use categories and a criterion such as ego level can be examined without including overlapping categories. One solution, to be used here, is to separately examine the properties of (a) the broadest superordinate LIWC categories and (b) all LIWC categories.
+**LIWC categories** are not mutually exclusive.  Dictionaries for superordinate categories (e.g., negative emotion) do not correspond precisely with the sum of subordinate dictionaries (dictionaries for anxiety, anger, and sadness). Consequently, no comprehensive relationship between LIWC language use categories and a criterion such as ego level can be examined without including overlapping categories. To help better understand relations between speech categories and Ego Level, we consider both (a) the broadest, logically independent, superordinate LIWC categories as well as (b) all LIWC categories.
 
-```{r}
-# extract subset of superordinate LIWC categories
+```{r Partitioning of data frame}
+library (psych)
+library(data.table)
+# partitioning of dataset into id, super, and subordinate LIWC categories
 source <- ("C:/Users/the/Dropbox/Shared Lopez Pauletti Lanning/Coded Exemplars/Exemplar LIWC Results.csv")
 exemplars.0 <- (read.csv(source))
-attach(exemplars.0)
-super <- c("WC", "WPS", "Sixltr", "Dic", "funct","verb","social","affect","cogmech","percept","bio","relativ","assent", "nonfl","filler","AllPct")
-exemplarsSuperord <- exemplars.0[super]
+#attach(exemplars.0)
+idnames <- c("Item","Level","Segment")
+super <- c( "WC", "Sixltr", "Dic", "funct","verb","social","affect","cogmech","percept","bio","relativ","assent", "nonfl","filler","AllPct")
+exemplarsIdnames.0 <- exemplars.0[idnames]
+exemplarsSuperord.0 <- exemplars.0[super]
+exemplarsSubord.0   <- subset(exemplars.0[,!(names(exemplars.0) %in% super)],
+                              select = -(c(Item, Level, Segment, WPS)))
 
 ```
 
-***Analyses of exemplars (material from Hy et al.) using LIWC***
+Scores on LIWC categories are typically percentages of words within a particular category (e.g., words of six or more letters) divided by the number of words in a given corpus (Word count).  Because the 'corpi' under examination consist of responses to a set of standard prompts (e.g., "My mother..."), we will instead examine the properties of counts rather than percentages. These values are more directly interpretable, and allow examination of the contribution of fluency or word count as a separate predictor (ref to Loevinger argument for not adjusting).  
 
-**Univariate analyses** 
+```{r From percentages to counts}
+# descriptive statistics for raw LIWc measures (percentages)
+head(describe(exemplarsSuperord.0),3L)
+head (describe(exemplarsSubord.0),3L)
 
-```{r}
-par(mfrow=c(2,2))#, mar=c(2, 2, 1, 0))
-for (i in 4:7)
-        boxplot(exemplars.0[, i] ~ exemplars.0[, 2], xlab="", varwidth=TRUE, top=FALSE, notch = FALSE, shrink = .6,
-                 main=colnames(exemplars.0)[i],
-                 col=(c("red", "orange","yellow","green", "blue1","blue4","violet","violetred")))
+exemplarsSuperordc.0 <-
+        as.data.frame((exemplarsSuperord.0) * .01* exemplarsSuperord.0$WC)
+exemplarsSubordc.0 <-
+        as.data.frame((exemplarsSubord.0) * .01* exemplarsSuperord.0$WC)
+exemplarsSuperordc.0$WC <- exemplarsSuperord.0$WC 
+
+# Entries should be within rounding of integers 
+head(exemplarsSuperordc.0,3L)
+head(exemplarsSubordc.0,3L)
+
+exemplarsSuperordc.0 <- round(exemplarsSuperordc.0,0)
+exemplarsSubordc.0 <- round(exemplarsSubordc.0,0)
+```
+
+# Results #
+
+The mean Ego Level in the exemplar data is 5.44, between the Self-Aware (5) and the Conscientious (6) levels and near to the midpoint of the range from Level 2 (Impulsive) to 9 (Integrated). * We'll want to compare this with the values for the participant data.*
+
+The average length of the 7659 sentence completions is 7.23 (sd = 4.37, median = 7). These snippets of text are short, and consequently the counts for most LIWC categories for most utterances are 0. For 7 of the 14 of the superordinate categories, and for 59 of the 64 subordinate categories, the median count was 0, and the distribution of scores is necessarily skewed.
+
+```{r Simple descriptives}
+describe(exemplarsIdnames.0)
+describe(exemplarsSuperordc.0)
+describe(exemplarsSubordc.0)
+```
+
+To partially address this skew, we transformed LIWC counts by taking their square roots.  This transformation is, we believe, conceptually as well as psychometrically sound: One can make the argument that the psychophysics of at least some LIWC categories is not a linear function, but shows some marginal decline. That is, within a given sentence completion, the difference between 0 and 1 counts of LIWC categories such as question marks, swear words, or expressions of negative affect is arguably more meaningful than the difference between counts of 1 and 2. Transformed counts may better capture the meaning of LIWC category scores. (Because of the preponderance of zero values in these counts, a square-root rather than log transformation is appropriat here; Tukey (198x))
+
+```{r Root transform}
+exemplarsSuperordRootCount.0 <- sqrt(exemplarsSuperordc.0)
+exemplarsSubordRootCount.0 <- sqrt(exemplarsSubordc.0)
 
 ```
 
+## Assessing the shape of the function predicting Ego Level from individual LIWC categories ##
 
-In Ego Level, a flatter distribution than in real world data can be expected. 
+In order to assess possible non-linearity in relationships between LIWC Categories and Ego Level, a k-fold analysis
+is used.  
 
-In LIWC, skew in raw counts, possible square root transform of count data. 
+## Item effects ##
 
-** Bivariate and multivariate analyses **
+We should look at these, but may not be able to analyze these in the exemplar data (which are relatively sparse).
 
-Correlations. 
+## Multiple regressions ## 
 
-Regressions. Linear and quadratic effects. Use of folded sample 
+K-fold, possibly LASSO to look at whole dimension (ego level).
+K-fold, possibly LASSO to look at distinctions between adjacent stages (ego level).
 
-Summary.  
+...
 
-***Analyses of respondent data using LIWC***
+# Study 2 #
 
+# Introduction #
 
+Description of data
 
-***Analyses of respondent data using other methods (including raw word counts)***
+Several differences between these data and the exemplar data used in Study 1 should be noted.  First, the distribution of Ego Level in real data can be expected to be narrower than in the exemplars, as the manual is written to be roughly equidiscriminating at all Ego Levels.
+
+Second, in the real data there are person as well as item effects. Here, a multi-level approach is used in which we first examine the effects of LIWC categories on responses to the (whole) 18-item measure, then consider differences between stems.
+
+# Methods # 
+
+Answer is to combine 18 items into a single corpus (Daniel).
+
+Set up data for Level II analysis (does the r between ego level and LIWC vary as a function of stem); Rachel.
+
+# Results #
+
+See Exemplars section above.
+
+## Analyses of respondent data using other methods (including raw word counts) ##
 
 The raw word count analyses should use LASSO regressions or something similar to control for the number of predictors.
 
-```{r}
-summary(cars)
-```
-
-You can also embed plots, for example:
-
-```{r, echo=FALSE}
-plot(cars)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
