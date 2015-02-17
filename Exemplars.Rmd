@@ -33,13 +33,13 @@ library (psych)
 library(data.table)
 # partitioning of dataset into id, super, and subordinate LIWC categories
 source <- ("C:/Users/the/Dropbox/Shared Lopez Pauletti Lanning/Coded Exemplars/Exemplar LIWC Results.csv")
-exemplars.0 <- (read.csv(source))
-#attach(exemplars.0)
+LIWC.0 <- (read.csv(source))
+#attach(LIWC.0)
 idnames <- c("Item","Level","Segment")
 super <- c( "WC", "Sixltr", "Dic", "funct","verb","social","affect","cogmech","percept","bio","relativ","assent", "nonfl","filler","AllPct")
-exemplarsIdnames.0 <- exemplars.0[idnames]
-exemplarsSuperord.0 <- exemplars.0[super]
-exemplarsSubord.0   <- subset(exemplars.0[,!(names(exemplars.0) %in% super)],
+LIWCIdnames.0 <- LIWC.0[idnames]
+LIWCSuperord.0 <- LIWC.0[super]
+LIWCSubord.0   <- subset(LIWC.0[,!(names(LIWC.0) %in% super)],
                               select = -(c(Item, Level, Segment, WPS)))
 
 ```
@@ -48,21 +48,21 @@ Scores on LIWC categories are typically percentages of words within a particular
 
 ```{r From percentages to counts}
 # descriptive statistics for raw LIWc measures (percentages)
-head(describe(exemplarsSuperord.0),3L)
-head (describe(exemplarsSubord.0),3L)
+head(describe(LIWCSuperord.0),3L)
+head (describe(LIWCSubord.0),3L)
 
-exemplarsSuperordc.0 <-
-        as.data.frame((exemplarsSuperord.0) * .01* exemplarsSuperord.0$WC)
-exemplarsSubordc.0 <-
-        as.data.frame((exemplarsSubord.0) * .01* exemplarsSuperord.0$WC)
-exemplarsSuperordc.0$WC <- exemplarsSuperord.0$WC 
-
+LIWCSuperordc.0 <-
+        as.data.frame((LIWCSuperord.0) * .01* LIWCSuperord.0$WC)
+LIWCSubordc.0 <-
+        as.data.frame((LIWCSubord.0) * .01* LIWCSuperord.0$WC)
+LIWCSuperordc.0$WC <- LIWCSuperord.0$WC 
+remove(LIWC.0)
 # Entries should be within rounding of integers 
-head(exemplarsSuperordc.0,3L)
-head(exemplarsSubordc.0,3L)
+head(LIWCSuperordc.0,3L)
+head(LIWCSubordc.0,3L)
 
-exemplarsSuperordc.0 <- round(exemplarsSuperordc.0,0)
-exemplarsSubordc.0 <- round(exemplarsSubordc.0,0)
+LIWCSuperordc.0 <- round(LIWCSuperordc.0,0)
+LIWCSubordc.0 <- round(LIWCSubordc.0,0)
 ```
 
 # Results #
@@ -72,23 +72,90 @@ The mean Ego Level in the exemplar data is 5.44, between the Self-Aware (5) and 
 The average length of the 7659 sentence completions is 7.23 (sd = 4.37, median = 7). These snippets of text are short, and consequently the counts for most LIWC categories for most utterances are 0. For 7 of the 14 of the superordinate categories, and for 59 of the 64 subordinate categories, the median count was 0, and the distribution of scores is necessarily skewed.
 
 ```{r Simple descriptives}
-describe(exemplarsIdnames.0)
-describe(exemplarsSuperordc.0)
-describe(exemplarsSubordc.0)
+describe(LIWCIdnames.0)
+describe(LIWCSuperordc.0)
+describe(LIWCSubordc.0)
 ```
 
-To partially address this skew, we transformed LIWC counts by taking their square roots.  This transformation is, we believe, conceptually as well as psychometrically sound: One can make the argument that the psychophysics of at least some LIWC categories is not a linear function, but shows some marginal decline. That is, within a given sentence completion, the difference between 0 and 1 counts of LIWC categories such as question marks, swear words, or expressions of negative affect is arguably more meaningful than the difference between counts of 1 and 2. Transformed counts may better capture the meaning of LIWC category scores. (Because of the preponderance of zero values in these counts, a square-root rather than log transformation is appropriat here; Tukey (198x))
+To partially address this skew, we transformed LIWC counts by taking their square roots.  This transformation is, we believe, conceptually as well as psychometrically sound: One can make the argument that the psychophysics of at least some LIWC categories is not a linear function, but shows some marginal decline. That is, within a given sentence completion, the difference between 0 and 1 counts of LIWC categories such as question marks, swear words, or expressions of negative affect is arguably more meaningful than the difference between counts of 1 and 2. Transformed counts may better capture the meaning of LIWC category scores. (Because of the preponderance of zero values in these counts, a square-root rather than log transformation is appropriate here; Tukey (198x))
 
 ```{r Root transform}
-exemplarsSuperordRootCount.0 <- sqrt(exemplarsSuperordc.0)
-exemplarsSubordRootCount.0 <- sqrt(exemplarsSubordc.0)
-
+LIWCSuperordRootCount.0 <- sqrt(LIWCSuperordc.0)
+LIWCSubordRootCount.0 <- sqrt(LIWCSubordc.0)
 ```
 
 ## Assessing the shape of the function predicting Ego Level from individual LIWC categories ##
 
 In order to assess possible non-linearity in relationships between LIWC Categories and Ego Level, a k-fold analysis
 is used.  
+
+In order to assess the shape (Linear, Quadratic, or Cubic) of the function predicting SCT scores from LIWC categories, I undertook a k-fold cross validation, as below.
+
+```{r}
+# install.packages("cvTools")
+library (cvTools)
+
+# Initialize results frame with column labels.  Values will be appended below
+results = c ("x", "r", "Cases", "Best model",
+             "Linear RTMSPE", "Intercept", "b.linear", "linearR2", 
+             "Quadrt RTMSPE", "Intercept", "b.linear", "b.quad", "quadR2",
+             "Cubic  RTMSPE", "Intercept", "b.linear", "b.quad", "b.cubic", "cube R2")
+
+# I ran the two sets of variables separately
+
+#xdata <- LIWCSuperordRootCount.0
+xdata <- LIWCSubordRootCount.0
+
+# Ego level
+ydata <- LIWCIdnames.0[,2]
+
+#Next line is Dummy value for knitR; real line follows
+for (i in 1:1)
+# for (i in 1:ncol(xdata))
+        {
+        xlabel <- colnames(xdata[i])
+        xvar <- xdata[,i]
+        yvar <- ydata
+        seed <- 999
+        workdata <- as.data.frame(cbind(xvar,yvar))
+        folds  <- cvFolds(nrow(workdata), K = 10, R = 1)
+        names(workdata) <- c("x","y")
+        
+        # Set up functions. Using LMrob does not work for some highly skewed variables, hence LM
+        c1 <- call("lm", formula = y ~ poly(x,1, raw=T))
+        c2 <- call("lm", formula = y ~ poly(x,2, raw=T))
+        c3 <- call("lm", formula = y ~ poly(x,3, raw=T))
+        
+        # k-fold regression
+        r1 <- cvFit(c1, data = workdata, y = workdata$y, folds = folds, cost = rtmspe, costArgs = list(trim = 0.1))
+        r2 <- cvFit(c2, data = workdata, y = workdata$y, folds = folds, cost = rtmspe, costArgs = list(trim = 0.1))
+        r3 <- cvFit(c3, data = workdata, y = workdata$y, folds = folds, cost = rtmspe, costArgs = list(trim = 0.1))
+        
+        # choice of best model
+        bestmod <- cvSelect(Lin = r1, Qua = r2, Cub = r3)
+        
+        # regression coefficients (weights, R2)
+        l1<-summary(lm(formula = y ~ poly(x,1, raw=T),data = workdata))
+        l2<-summary(lm(formula = y ~ poly(x,2, raw=T),data = workdata))
+        l3<-summary(lm(formula = y ~ poly(x,3, raw=T),data = workdata))
+
+        # and the simple correlation
+        corxy <- cor (xvar,yvar)
+        
+        resultsValues = c(xlabel,corxy[1],bestmod$n, bestmod$best[[1]],
+                          bestmod$cv[1,2], l1$coefficients[[1]], l1$coefficients[[2]], l1$r.squared,
+                          bestmod$cv[2,2], l2$coefficients[[1]], l2$coefficients[[2]], l2$coefficients[[3]], 
+                          l2$r.squared,
+                          bestmod$cv[3,2], l3$coefficients[[1]], l3$coefficients[[2]], l3$coefficients[[3]],
+                          l3$coefficients[[4]],  l3$r.squared)
+        results <- cbind (results,resultsValues)
+        }
+#write.csv(results, file = "results1.csv")
+#write.csv(results, file = "results2.csv")
+
+```
+
+Results have been compiled and transposed into a separate Excel spreadsheet.
 
 ## Item effects ##
 
