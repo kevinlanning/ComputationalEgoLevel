@@ -11,15 +11,9 @@ Our proposed series of analyses is complex. The project involves at least two ty
 **Two types of data**. Datasets will include both *exemplars* (the contents of the 1996 scoring manual) and *empirical protocols* (scored sentence completion tests from Lannings' lab and those of others).  The datasets differ in two ways. First, the size of the exemplar dataset is substantially smaller than that of the empirical data (see Table 1).  Second, in the exemplars, we can expect to find a relative oversampling of responses at extreme (particularly high) levels; without this oversampling, the number of sample responses at these levels would be very low, and potential coders could not be expected to reliably recognize and score the rich, complex responses of the highest levels when they do occur.  Third, in the empirical protocols, but not the exemplars, individual sentence completions are nested within persons, requiring a multilevel approach to data analysis.  Because of these differences, the results for the empirical data cannot be expected to simply replicate those for the exemplars.
 
 ----------
+![](http://i.imgur.com/AS0YnVp.png)
 
-####Table 1. 
-####Datasets presently available 
 
-| Dataset     | N (persons) | N (responses) | N (distinct 'words'*) | N (total words) | Status 5/15
-| --------- | -----:|
-| Exemplars  | -- | 7586| 4912| 57317 | Analyses largely complete
-| Empirical**     | >1084 | 19442| ?|137460 |Data still being compiled
- *Note: 'words' includes selected punctuation marks.  ** From Master.xlsx as of 5/7/15
 
 ----------
 **Two approaches to coding speech**.  A distinction may be drawn between closed or dictionary and open approaches to linguistic analysis  (see, e.g., Park, Schwartz, Eichstaedt, Kern, Kosinski, Stillwell, Ungar, & Seligman, 2014). In a closed approach, words are first classified into *a priori* categories, as in the  Linguistic Inquiry and Word Count (LIWC; Pennebaker et al, 2007). This approach has the advantage of reducing a large number of measures (individual words) into a smaller set, but loses the possibility of a fine grained analysis.  We believe that each of these approaches will be informative.
@@ -28,9 +22,9 @@ Our proposed series of analyses is complex. The project involves at least two ty
 
 **Three ways of interpreting ego level**.  Ego level is a construct which may be understood in at least three distinct ways, each of which suggests a different approach to the language based assessment (LBA) of personality.  
 
-First, ego level may be treated **as a single dimension**. When correlations between ego level and constructs such as the five factors are examined, for example, ego level is implicitly treated as a single dimension.  Typically, but not invariably, only linear relations are examined (cf. Einstein & Lanning, 1998).  This suggests an approach in which ego development is treated as a simple continuum,  and the LBA is based on the relationship between this continuum and the simple or relative frequency of occurrence of words in speech.  
+First, ego level may be treated **as a single dimension**. When correlations between ego level and constructs such as the five factors are examined, ego level is implicitly treated as a single dimension.  Typically, but not invariably, only linear relations are examined (cf. Einstein & Lanning, 1998).  This suggests an approach in which ego development is treated as a simple continuum,  and the LBA is based on the relationship between this continuum and the simple or relative frequency of occurrence of words in speech.  
 
-Second, ego level may be treated **as a set of discrete types**.  This suggests an  approach to LBA in which language at a given level (e.g., Conscientious) is compared to that for all other levels taken together.  This approach is illustrated in Figure 1, in which a word clouds is shown for the words (in the exemplar data) which are differentially characteristic of the Conformist level in contrast to each of the remaining levels of ego development. 
+Second, ego level may be treated **as a set of discrete types**.  This suggests an  approach to LBA in which language at a given level (e.g., Conscientious) is compared to that for all other levels taken together.  This approach is illustrated in Figure 1, in which a word cloud is shown for the words (in the exemplar data) which are differentially characteristic of the Conformist level in contrast to each of the remaining levels of ego development. 
 
 ----------
 
