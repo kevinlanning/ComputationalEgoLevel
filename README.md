@@ -1,5 +1,7 @@
 # ComputationalEgoLevel
 
+# For most recent update: see difftextanal0915rb.pdf
+
 ## Project overview
 
 Ego level has been called the "master trait," second only to intelligence in its importance for understanding individual differences in personality (Loevinger, 1966, p. 205). Ego level is typically assessed using one of several versions of the Washington University Sentence Completion Test (WUSCT; Hy & Loevinger, 1996). The WUSCT has been described as the most thoroughly validated projective measure of personality (Lilienfeld, Wood, & Garb, 2000). Because the construct of ego level is assessed by the analysis of samples of speech, and because the relationship between these speech samples and the construct has been extensively validated, ego level is an attractive candidate for applying computational or corpus linguistic methods.  **In this project, we examine the relationship between language use and ego level.**
