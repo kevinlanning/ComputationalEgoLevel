@@ -1,6 +1,6 @@
 # ComputationalEgoLevel
 
-# For most recent update: see difftextanal0915rb.pdf
+## 08/2017: See https://osf.io/jw7dy/ for updates.
 
 ## Project overview
 
